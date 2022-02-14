@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.simplecrud_product.mapper.IDrinkMapper">
+
+    <select id="getDrinkCount" resultType="INTEGER">
+        SELECT
+            COUNT(*)
+        FROM
+            Drink
+    </select>
+
+    <select id="getAllDrinks" resultType="com.example.simplecrud_product.model.drink.Drink">
+        SELECT
+            DrinkId,
+            Name,
+            Price,
+            RegMemberId
+        FROM
+            Drink
+    </select>
+
+    <select id="getDrinksWithPaging" parameterType="map" resultType="com.example.simplecrud_product.model.drink.Drink">
+        SELECT
+            DrinkId,
+            Name,
+            Price,
+            RegMemberId
+        FROM
+            Drink AS D
+        LIMIT
+            ${take}
+        OFFSET
+            #{skip}
+    </select>
+
+    <select id="getDrink" parameterType="String" resultType="com.example.simplecrud_product.model.drink.Drink">
+        SELECT
+            DrinkId,
+            Name,
+            Price,
+            RegMemberId
+        FROM
+            Drink
+        WHERE
+            DrinkId = ${drinkId}
+    </select>
+
+    <insert id="addDrink" parameterType="com.example.simplecrud_product.model.drink.AddDrink">
+        INSERT INTO Drink
+            (Name, Price, RegMemberId)
+        VALUES
+            (#{name}, #{price}, ${regMemberId})
+    </insert>
+
+    <update id="updateDrink" parameterType="com.example.simplecrud_product.model.drink.UpdateDrink">
+        UPDATE
+            Drink
+        SET
+            Name = #{name},
+            Price = #{price},
+            RegMemberId = #{regMemberId}
+        WHERE
+            DrinkId = ${drinkId}
+    </update>
+
+    <delete id="deleteDrink" parameterType="String">
+        DELETE FROM
+            Drink
+        WHERE
+            DrinkId = ${drinkId}
+    </delete>
+
+</mapper>
