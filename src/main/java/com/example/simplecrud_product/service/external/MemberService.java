@@ -1,4 +1,4 @@
-package com.example.simplecrud_product.service;
+package com.example.simplecrud_product.service.external;
 
 import com.example.simplecrud_product.define.EurekaVirtualHostNames;
 import com.example.simplecrud_product.model.member.profile.get.GetMemberProfileRequest;

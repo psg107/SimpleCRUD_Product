@@ -5,6 +5,7 @@ import com.example.simplecrud_product.model.drink.AddDrink;
 import com.example.simplecrud_product.model.drink.Drink;
 import com.example.simplecrud_product.model.drink.UpdateDrink;
 import com.example.simplecrud_product.repository.DrinkRepository;
+import com.example.simplecrud_product.service.external.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
