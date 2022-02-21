@@ -1,11 +1,10 @@
 package com.example.simplecrud_product.util;
 
-import com.example.simplecrud_product.model.common.RestServiceResponse;
+import com.example.simplecrud_product.model.common.ServiceResponse;
 import org.apache.commons.lang.NotImplementedException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -41,7 +40,7 @@ public class RestServiceClient<T> {
         return this;
     }
 
-    public <T2> RestServiceResponse<T2> request(Class<T2> responseType) {
+    public <T2> ServiceResponse<T2> request(Class<T2> responseType) {
         
         //template 생성
         var restTemplate = new RestTemplate();
@@ -66,9 +65,7 @@ public class RestServiceClient<T> {
         var data = responseEntity.getBody();
 
         //set response
-        var response = new RestServiceResponse<T2>();
-        response.setStatusCode(statusCode);
-        response.setData(data);
+        var response = new ServiceResponse<T2>(statusCode, data);
 
         return response;
     }

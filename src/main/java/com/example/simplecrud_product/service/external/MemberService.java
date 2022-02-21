@@ -1,7 +1,7 @@
 package com.example.simplecrud_product.service.external;
 
 import com.example.simplecrud_product.define.EurekaVirtualHostNames;
-import com.example.simplecrud_product.model.common.RestServiceResponse;
+import com.example.simplecrud_product.model.common.ServiceResponse;
 import com.example.simplecrud_product.model.member.profile.get.GetMemberProfileRequest;
 import com.example.simplecrud_product.model.member.profile.get.GetMemberProfileResponse;
 import com.example.simplecrud_product.model.member.profile.search.SearchMemberProfilesRequest;
@@ -10,7 +10,6 @@ import com.example.simplecrud_product.model.member.profile.shared.MemberProfile;
 import com.example.simplecrud_product.util.RestServiceClient;
 import com.netflix.discovery.EurekaClient;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -38,7 +37,7 @@ public class MemberService {
         var url = serviceHost + endpoint;
 
         //request
-        RestServiceResponse<GetMemberProfileResponse> serviceResponse = new RestServiceClient<GetMemberProfileRequest>()
+        ServiceResponse<GetMemberProfileResponse> serviceResponse = new RestServiceClient<GetMemberProfileRequest>()
                 .setUrl(url)
                 .setHttpMethod(HttpMethod.GET)
                 .request(GetMemberProfileResponse.class);
@@ -65,7 +64,7 @@ public class MemberService {
         data.setMemberIds(memberIds);
 
         //request
-        RestServiceResponse<SearchMemberProfilesResponse> serviceResponse = new RestServiceClient<SearchMemberProfilesRequest>()
+        ServiceResponse<SearchMemberProfilesResponse> serviceResponse = new RestServiceClient<SearchMemberProfilesRequest>()
                 .setUrl(url)
                 .setHttpMethod(HttpMethod.GET)
                 .request(SearchMemberProfilesResponse.class);

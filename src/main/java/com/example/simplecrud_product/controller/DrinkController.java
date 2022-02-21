@@ -1,6 +1,7 @@
 package com.example.simplecrud_product.controller;
 
 import com.example.simplecrud_product.model.common.Pagination;
+import com.example.simplecrud_product.model.common.ServiceResponse;
 import com.example.simplecrud_product.model.drink.AddDrink;
 import com.example.simplecrud_product.model.drink.Drink;
 import com.example.simplecrud_product.model.drink.UpdateDrink;
@@ -10,8 +11,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/api/drink")
@@ -31,13 +30,15 @@ public class DrinkController {
      * @return
      */
     @RequestMapping(path = "", method = RequestMethod.GET)
-    public Pagination<Drink> getDrinks(@RequestParam(value = "page", defaultValue = "1", required = false) int page) {
+    public ServiceResponse<Pagination<Drink>> getDrinks(@RequestParam(value = "page", defaultValue = "1", required = false) int page) {
 
         var pageSizeValue = environment.getProperty("pagination.page-size");
         var pageSize = Integer.parseInt(pageSizeValue);
         Pagination<Drink> pagingDrinks = this.drinkService.getDrinks(page, pageSize);
 
-        return pagingDrinks;
+        var response = new ServiceResponse(HttpStatus.OK, pagingDrinks);
+
+        return response;
     }
 
     /**
@@ -46,16 +47,16 @@ public class DrinkController {
      * @return
      */
     @RequestMapping(path = "/add", method = RequestMethod.POST)
-    public ResponseEntity addDrink(AddDrink drink) {
+    public ServiceResponse addDrink(AddDrink drink) {
         var userId = this.getAuthorizedUserIDFromRequestToken();
         drink.setRegMemberId(userId);
 
         var added = this.drinkService.addDrink(drink);
         if (added == false) {
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ServiceResponse(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new ResponseEntity(HttpStatus.CREATED);
+        return new ServiceResponse(HttpStatus.CREATED);
     }
 
     /**
@@ -64,13 +65,13 @@ public class DrinkController {
      * @return
      */
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity detail(@PathVariable int id) {
+    public ServiceResponse<Drink> detail(@PathVariable int id) {
         var drink = this.drinkService.getDrink(id);
         if (drink == null) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ServiceResponse(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<Drink>(drink, HttpStatus.OK);
+        return new ServiceResponse(HttpStatus.OK, drink);
     }
 
     /**
@@ -79,29 +80,29 @@ public class DrinkController {
      * @return
      */
     @RequestMapping(path = "/update", method = RequestMethod.POST)
-    public ResponseEntity update(UpdateDrink drink) {
+    public ServiceResponse<UpdateDrink> update(UpdateDrink drink) {
         var userId = this.getAuthorizedUserIDFromRequestToken();
         drink.setRegMemberId(userId);
 
         var updated = this.drinkService.updateDrink(drink);
         if (updated == false) {
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ServiceResponse(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new ResponseEntity<UpdateDrink>(drink, HttpStatus.OK);
+        return new ServiceResponse(HttpStatus.OK, drink);
     }
 
     /**
      * 삭제
      */
     @RequestMapping(path = "/delete/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity delete(@PathVariable int id) {
+    public ServiceResponse delete(@PathVariable int id) {
         var deleted = this.drinkService.deleteDrink(id);
         if (deleted == false){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ServiceResponse(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new ResponseEntity(HttpStatus.OK);
+        return new ServiceResponse(HttpStatus.OK);
     }
     
     @SuppressWarnings("인증을 어떻게 처리하지?")
