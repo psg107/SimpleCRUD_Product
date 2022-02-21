@@ -1,4 +1,4 @@
-package com.example.simplecrud_product.model.drink;
+package com.example.simplecrud_product.model.drink.common;
 
 import lombok.Getter;
 import lombok.Setter;

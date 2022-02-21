@@ -37,14 +37,13 @@ public class MemberService {
         var url = serviceHost + endpoint;
 
         //request
-        ServiceResponse<GetMemberProfileResponse> serviceResponse = new RestServiceClient<GetMemberProfileRequest>()
+        var serviceResponse = new RestServiceClient<GetMemberProfileRequest>()
                 .setUrl(url)
                 .setHttpMethod(HttpMethod.GET)
                 .request(GetMemberProfileResponse.class);
 
         //response
-        var responseData = serviceResponse.getData();
-        var memberProfile = responseData.getMemberProfile();
+        var memberProfile = serviceResponse.getData();
 
         return memberProfile;
     }
@@ -64,14 +63,13 @@ public class MemberService {
         data.setMemberIds(memberIds);
 
         //request
-        ServiceResponse<SearchMemberProfilesResponse> serviceResponse = new RestServiceClient<SearchMemberProfilesRequest>()
+        var serviceResponse = new RestServiceClient<SearchMemberProfilesRequest>()
                 .setUrl(url)
                 .setHttpMethod(HttpMethod.GET)
                 .request(SearchMemberProfilesResponse.class);
 
         //response
-        var responseData = serviceResponse.getData();
-        var memberProfiles = responseData.getMemberProfiles();
+        var memberProfiles = serviceResponse.getData();
 
         return memberProfiles;
     }

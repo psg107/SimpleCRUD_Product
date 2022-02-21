@@ -1,9 +1,19 @@
-package com.example.simplecrud_product.model.drink;
+package com.example.simplecrud_product.model.drink.common;
 
 import lombok.Getter;
 import lombok.Setter;
 
-public class AddDrink {
+/**
+ * 음료 정보
+ */
+public class Drink {
+    /**
+     * id
+     */
+    @Getter
+    @Setter
+    private int drinkId;
+
     /**
      * 메뉴명
      */
@@ -24,4 +34,11 @@ public class AddDrink {
     @Getter
     @Setter
     private int regMemberId;
+
+    /**
+     * 음료 등록한 사용자명
+     */
+    @Getter
+    @Setter
+    private String regMemberName;
 }

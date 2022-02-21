@@ -1,9 +1,9 @@
 package com.example.simplecrud_product.service;
 
 import com.example.simplecrud_product.model.common.Pagination;
-import com.example.simplecrud_product.model.drink.AddDrink;
-import com.example.simplecrud_product.model.drink.Drink;
-import com.example.simplecrud_product.model.drink.UpdateDrink;
+import com.example.simplecrud_product.model.drink.common.AddDrink;
+import com.example.simplecrud_product.model.drink.common.Drink;
+import com.example.simplecrud_product.model.drink.common.UpdateDrink;
 import com.example.simplecrud_product.repository.DrinkRepository;
 import com.example.simplecrud_product.service.external.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;

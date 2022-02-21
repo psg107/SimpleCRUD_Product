@@ -1,7 +1,6 @@
 package com.example.simplecrud_product.model.common;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
 /**
@@ -10,7 +9,7 @@ import org.springframework.http.HttpStatus;
 public class ServiceResponse<T> {
 
     @Getter
-    private int httpStatus;
+    private int code;
 
     @Getter
     private String message;
@@ -18,26 +17,30 @@ public class ServiceResponse<T> {
     @Getter
     private T data;
 
+    public ServiceResponse() {
+
+    }
+
     public ServiceResponse(HttpStatus httpStatus, T data) {
-        this.httpStatus = httpStatus.value();
+        this.code = httpStatus.value();
         this.message = null;
         this.data = data;
     }
 
     public ServiceResponse(HttpStatus httpStatus) {
-        this.httpStatus = httpStatus.value();
+        this.code = httpStatus.value();
         this.message = null;
         this.data = null;
     }
 
     public ServiceResponse(HttpStatus httpStatus, String message) {
-        this.httpStatus = httpStatus.value();
+        this.code = httpStatus.value();
         this.message = message;
         this.data = null;
     }
 
     public ServiceResponse(HttpStatus httpStatus, String message, T data) {
-        this.httpStatus = httpStatus.value();
+        this.code = httpStatus.value();
         this.message = message;
         this.data = data;
     }

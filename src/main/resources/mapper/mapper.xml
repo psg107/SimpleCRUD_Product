@@ -9,7 +9,7 @@
             Drink
     </select>
 
-    <select id="getAllDrinks" resultType="com.example.simplecrud_product.model.drink.Drink">
+    <select id="getAllDrinks" resultType="com.example.simplecrud_product.model.drink.common.Drink">
         SELECT
             DrinkId,
             Name,
@@ -17,9 +17,11 @@
             RegMemberId
         FROM
             Drink
+        ORDER BY
+            DrinkId DESC
     </select>
 
-    <select id="getDrinksWithPaging" parameterType="map" resultType="com.example.simplecrud_product.model.drink.Drink">
+    <select id="getDrinksWithPaging" parameterType="map" resultType="com.example.simplecrud_product.model.drink.common.Drink">
         SELECT
             DrinkId,
             Name,
@@ -27,13 +29,15 @@
             RegMemberId
         FROM
             Drink AS D
+        ORDER BY
+            DrinkId DESC
         LIMIT
             ${take}
         OFFSET
             #{skip}
     </select>
 
-    <select id="getDrink" parameterType="String" resultType="com.example.simplecrud_product.model.drink.Drink">
+    <select id="getDrink" parameterType="String" resultType="com.example.simplecrud_product.model.drink.common.Drink">
         SELECT
             DrinkId,
             Name,
@@ -43,16 +47,18 @@
             Drink
         WHERE
             DrinkId = ${drinkId}
+        ORDER BY
+            DrinkId DESC
     </select>
 
-    <insert id="addDrink" parameterType="com.example.simplecrud_product.model.drink.AddDrink">
+    <insert id="addDrink" parameterType="com.example.simplecrud_product.model.drink.common.AddDrink">
         INSERT INTO Drink
             (Name, Price, RegMemberId)
         VALUES
             (#{name}, #{price}, ${regMemberId})
     </insert>
 
-    <update id="updateDrink" parameterType="com.example.simplecrud_product.model.drink.UpdateDrink">
+    <update id="updateDrink" parameterType="com.example.simplecrud_product.model.drink.common.UpdateDrink">
         UPDATE
             Drink
         SET

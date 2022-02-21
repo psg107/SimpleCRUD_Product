@@ -2,15 +2,24 @@ package com.example.simplecrud_product.controller;
 
 import com.example.simplecrud_product.model.common.Pagination;
 import com.example.simplecrud_product.model.common.ServiceResponse;
-import com.example.simplecrud_product.model.drink.AddDrink;
-import com.example.simplecrud_product.model.drink.Drink;
-import com.example.simplecrud_product.model.drink.UpdateDrink;
+import com.example.simplecrud_product.model.drink.common.AddDrink;
+import com.example.simplecrud_product.model.drink.common.Drink;
+import com.example.simplecrud_product.model.drink.common.UpdateDrink;
+import com.example.simplecrud_product.model.drink.service.add.AddDrinkRequest;
+import com.example.simplecrud_product.model.drink.service.add.AddDrinkResponse;
+import com.example.simplecrud_product.model.drink.service.delete.DeleteDrinkResponse;
+import com.example.simplecrud_product.model.drink.service.detail.GetDrinkDetailResponse;
+import com.example.simplecrud_product.model.drink.service.get.GetDrinkResponse;
+import com.example.simplecrud_product.model.drink.service.update.UpdateDrinkRequest;
+import com.example.simplecrud_product.model.drink.service.update.UpdateDrinkResponse;
 import com.example.simplecrud_product.service.DrinkService;
+import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping(path = "/api/drink")
@@ -30,7 +39,7 @@ public class DrinkController {
      * @return
      */
     @RequestMapping(path = "", method = RequestMethod.GET)
-    public ServiceResponse<Pagination<Drink>> getDrinks(@RequestParam(value = "page", defaultValue = "1", required = false) int page) {
+    public ServiceResponse<GetDrinkResponse> getDrinks(@RequestParam(value = "page", defaultValue = "1", required = false) int page) {
 
         var pageSizeValue = environment.getProperty("pagination.page-size");
         var pageSize = Integer.parseInt(pageSizeValue);
@@ -43,15 +52,17 @@ public class DrinkController {
 
     /**
      * 등록
-     * @param drink
+     * @param addDrinkRequest
      * @return
      */
     @RequestMapping(path = "/add", method = RequestMethod.POST)
-    public ServiceResponse addDrink(AddDrink drink) {
+    public ServiceResponse<AddDrinkResponse> addDrink(@RequestBody AddDrinkRequest addDrinkRequest, HttpServletResponse response) {
         var userId = this.getAuthorizedUserIDFromRequestToken();
-        drink.setRegMemberId(userId);
+        addDrinkRequest.setRegMemberId(userId);
 
-        var added = this.drinkService.addDrink(drink);
+        var addDrink = new DozerBeanMapper().map(addDrinkRequest, AddDrink.class);
+
+        var added = this.drinkService.addDrink(addDrink);
         if (added == false) {
             return new ServiceResponse(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -65,7 +76,7 @@ public class DrinkController {
      * @return
      */
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
-    public ServiceResponse<Drink> detail(@PathVariable int id) {
+    public ServiceResponse<GetDrinkDetailResponse> detail(@PathVariable int id, HttpServletResponse response) {
         var drink = this.drinkService.getDrink(id);
         if (drink == null) {
             return new ServiceResponse(HttpStatus.NOT_FOUND);
@@ -76,27 +87,29 @@ public class DrinkController {
 
     /**
      * 수정
-     * @param drink
+     * @param updateDrinkRequest
      * @return
      */
     @RequestMapping(path = "/update", method = RequestMethod.POST)
-    public ServiceResponse<UpdateDrink> update(UpdateDrink drink) {
+    public ServiceResponse<UpdateDrinkResponse> update(@RequestBody UpdateDrinkRequest updateDrinkRequest, HttpServletResponse response) {
         var userId = this.getAuthorizedUserIDFromRequestToken();
-        drink.setRegMemberId(userId);
+        updateDrinkRequest.setRegMemberId(userId);
 
-        var updated = this.drinkService.updateDrink(drink);
+        var updateDrink = new DozerBeanMapper().map(updateDrinkRequest, UpdateDrink.class);
+
+        var updated = this.drinkService.updateDrink(updateDrink);
         if (updated == false) {
             return new ServiceResponse(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new ServiceResponse(HttpStatus.OK, drink);
+        return new ServiceResponse(HttpStatus.OK, updateDrink);
     }
 
     /**
      * 삭제
      */
     @RequestMapping(path = "/delete/{id}", method = RequestMethod.DELETE)
-    public ServiceResponse delete(@PathVariable int id) {
+    public ServiceResponse<DeleteDrinkResponse> delete(@PathVariable int id, HttpServletResponse response) {
         var deleted = this.drinkService.deleteDrink(id);
         if (deleted == false){
             return new ServiceResponse(HttpStatus.INTERNAL_SERVER_ERROR);

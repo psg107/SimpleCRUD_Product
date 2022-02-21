@@ -1,11 +1,10 @@
 package com.example.simplecrud_product.repository;
 
 import com.example.simplecrud_product.mapper.IDrinkMapper;
-import com.example.simplecrud_product.model.drink.AddDrink;
-import com.example.simplecrud_product.model.drink.Drink;
-import com.example.simplecrud_product.model.drink.UpdateDrink;
+import com.example.simplecrud_product.model.drink.common.AddDrink;
+import com.example.simplecrud_product.model.drink.common.Drink;
+import com.example.simplecrud_product.model.drink.common.UpdateDrink;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

@@ -5,6 +5,7 @@ import org.apache.commons.lang.NotImplementedException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -40,8 +41,8 @@ public class RestServiceClient<T> {
         return this;
     }
 
-    public <T2> ServiceResponse<T2> request(Class<T2> responseType) {
-        
+    public <T2 extends ServiceResponse> T2 request(Class<T2> responseClass) {
+
         //template 생성
         var restTemplate = new RestTemplate();
 
@@ -58,14 +59,10 @@ public class RestServiceClient<T> {
         };
 
         //request
-        var responseEntity = restTemplate.exchange(this.url, this.method, requestEntity, responseType);
+        ResponseEntity<T2> responseEntity = restTemplate.exchange(this.url, this.method, requestEntity, responseClass);
 
         //get statusCode & data
-        var statusCode = responseEntity.getStatusCode();
-        var data = responseEntity.getBody();
-
-        //set response
-        var response = new ServiceResponse<T2>(statusCode, data);
+        T2 response = responseEntity.getBody();
 
         return response;
     }

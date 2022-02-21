@@ -1,8 +1,8 @@
 package com.example.simplecrud_product.mapper;
 
-import com.example.simplecrud_product.model.drink.AddDrink;
-import com.example.simplecrud_product.model.drink.Drink;
-import com.example.simplecrud_product.model.drink.UpdateDrink;
+import com.example.simplecrud_product.model.drink.common.AddDrink;
+import com.example.simplecrud_product.model.drink.common.Drink;
+import com.example.simplecrud_product.model.drink.common.UpdateDrink;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
