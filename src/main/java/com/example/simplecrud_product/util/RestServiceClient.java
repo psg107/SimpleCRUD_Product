@@ -1,5 +1,6 @@
 package com.example.simplecrud_product.util;
 
+import com.example.simplecrud_product.model.common.RestServiceResponse;
 import org.apache.commons.lang.NotImplementedException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -20,27 +21,27 @@ public class RestServiceClient<T> {
         this.headers = new LinkedMultiValueMap<String, String>();
     }
 
-    public RestServiceClient setUrl(String url) {
+    public RestServiceClient<T> setUrl(String url) {
         this.url = url;
         return this;
     }
 
-    public RestServiceClient setHttpMethod(HttpMethod method) {
+    public RestServiceClient<T> setHttpMethod(HttpMethod method) {
         this.method = method;
         return this;
     }
 
-    public RestServiceClient setData(T data) {
+    public RestServiceClient<T> setData(T data) {
         this.data = data;
         return this;
     }
 
-    public RestServiceClient addHeader(String key, String value) {
+    public RestServiceClient<T> addHeader(String key, String value) {
         this.headers.add(key, value);
         return this;
     }
 
-    public <T2> ResponseEntity<T2> request(Class<T2> responseType) {
+    public <T2> RestServiceResponse<T2> request(Class<T2> responseType) {
         
         //template 생성
         var restTemplate = new RestTemplate();
@@ -60,6 +61,15 @@ public class RestServiceClient<T> {
         //request
         var responseEntity = restTemplate.exchange(this.url, this.method, requestEntity, responseType);
 
-        return responseEntity;
+        //get statusCode & data
+        var statusCode = responseEntity.getStatusCode();
+        var data = responseEntity.getBody();
+
+        //set response
+        var response = new RestServiceResponse<T2>();
+        response.setStatusCode(statusCode);
+        response.setData(data);
+
+        return response;
     }
 }

@@ -1,6 +1,7 @@
 package com.example.simplecrud_product.service.external;
 
 import com.example.simplecrud_product.define.EurekaVirtualHostNames;
+import com.example.simplecrud_product.model.common.RestServiceResponse;
 import com.example.simplecrud_product.model.member.profile.get.GetMemberProfileRequest;
 import com.example.simplecrud_product.model.member.profile.get.GetMemberProfileResponse;
 import com.example.simplecrud_product.model.member.profile.search.SearchMemberProfilesRequest;
@@ -31,21 +32,20 @@ public class MemberService {
 
         var instanceInfo = eurekaClient.getNextServerFromEureka(EurekaVirtualHostNames.SIMPLE_CRUD_MEMBER, false);
 
+        //url
         var serviceHost = instanceInfo.getHomePageUrl();
-        var endpoint = "member/" + memberId;
-
-        //#warning 문자열 합치는거 확인 필요
-        //endpoint
+        var endpoint = "api/member/" + memberId;
         var url = serviceHost + endpoint;
 
-        //#warning 뭔가 사용법이 잘못된 것 같은데..
-        ResponseEntity<GetMemberProfileResponse> responseEntity = new RestServiceClient<GetMemberProfileRequest>()
+        //request
+        RestServiceResponse<GetMemberProfileResponse> serviceResponse = new RestServiceClient<GetMemberProfileRequest>()
                 .setUrl(url)
                 .setHttpMethod(HttpMethod.GET)
                 .request(GetMemberProfileResponse.class);
 
-        var response = responseEntity.getBody();
-        var memberProfile = response.getMemberProfile();
+        //response
+        var responseData = serviceResponse.getData();
+        var memberProfile = responseData.getMemberProfile();
 
         return memberProfile;
     }
@@ -54,27 +54,25 @@ public class MemberService {
 
         var instanceInfo = eurekaClient.getNextServerFromEureka(EurekaVirtualHostNames.SIMPLE_CRUD_MEMBER, false);
 
+        //url
         var serviceHost = instanceInfo.getHomePageUrl();
         var endpoint = "api/member/search";
         var query = "?memberIds=" + String.join(",", memberIds.stream().map(String::valueOf).collect(Collectors.toList()));
-
-        //#warning 문자열 합치는거 확인 필요
-        //endpoint
         var url = serviceHost + endpoint + query;
 
-        //data
-        //#warning object -> query string 변환할 수 있도록 처리 필요
+        //data (현재 안쓰는중, object -> query string 변환할 수 있도록 처리 필요)
         var data = new SearchMemberProfilesRequest();
         data.setMemberIds(memberIds);
 
-        //#warning 뭔가 사용법이 잘못된 것 같은데..
-        ResponseEntity<SearchMemberProfilesResponse> responseEntity = new RestServiceClient<SearchMemberProfilesRequest>()
+        //request
+        RestServiceResponse<SearchMemberProfilesResponse> serviceResponse = new RestServiceClient<SearchMemberProfilesRequest>()
                 .setUrl(url)
                 .setHttpMethod(HttpMethod.GET)
                 .request(SearchMemberProfilesResponse.class);
 
-        var response = responseEntity.getBody();
-        var memberProfiles = response.getMemberProfiles();
+        //response
+        var responseData = serviceResponse.getData();
+        var memberProfiles = responseData.getMemberProfiles();
 
         return memberProfiles;
     }
