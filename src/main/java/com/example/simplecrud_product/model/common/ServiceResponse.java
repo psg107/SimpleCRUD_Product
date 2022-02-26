@@ -1,5 +1,6 @@
 package com.example.simplecrud_product.model.common;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
@@ -11,9 +12,11 @@ public class ServiceResponse<T> {
     @Getter
     private int code;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Getter
     private String message;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Getter
     private T data;
 

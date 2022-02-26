@@ -33,8 +33,9 @@ public class MemberService {
 
         //url
         var serviceHost = instanceInfo.getHomePageUrl();
-        var endpoint = "api/member/" + memberId;
-        var url = serviceHost + endpoint;
+        var endpoint = "api/member";
+        var query = "?memberId=" + memberId;
+        var url = serviceHost + endpoint + query;
 
         //request
         var serviceResponse = new RestServiceClient<GetMemberProfileRequest>()

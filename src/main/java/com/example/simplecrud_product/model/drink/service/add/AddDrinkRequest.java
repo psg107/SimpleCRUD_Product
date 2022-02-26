@@ -1,9 +1,11 @@
 package com.example.simplecrud_product.model.drink.service.add;
 
+import com.example.simplecrud_product.exception.InvalidRequestModelException;
+import com.example.simplecrud_product.model.common.ValidatableRequestModel;
 import lombok.Getter;
 import lombok.Setter;
 
-public class AddDrinkRequest {
+public class AddDrinkRequest extends ValidatableRequestModel {
     /**
      * 메뉴명
      */
@@ -18,10 +20,13 @@ public class AddDrinkRequest {
     @Setter
     private int price;
 
-    /**
-     * 음료 등록한 사용자 ID
-     */
-    @Getter
-    @Setter
-    private int regMemberId;
+    @Override
+    public void validate() throws InvalidRequestModelException {
+        if (name.isBlank()){
+            throw new InvalidRequestModelException("메뉴명이 입력되지 않았습니다.");
+        }
+        if (price <= 0) {
+            throw new InvalidRequestModelException("가격이 잘못되었습니다.");
+        }
+    }
 }
